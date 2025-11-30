@@ -13,13 +13,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.annotation.WebServlet;
 
 import murach.business.User;
-//import murach.data.UserDB;
 
-/**
- *
- * @author ASUS
- */
 @WebServlet("/emailList")
+
 public class EmailListServlet extends HttpServlet {
 
     @Override
@@ -27,7 +23,8 @@ public class EmailListServlet extends HttpServlet {
                           HttpServletResponse response) 
                           throws ServletException, IOException {
 
-        String url = "/index.html";
+//        String url = "/index.html";
+        String url = "/index.jsp";
 
         // get current action
         String action = request.getParameter("action");
@@ -45,9 +42,10 @@ public class EmailListServlet extends HttpServlet {
             action = "join";  // default action
         }
         
-        // perform action and set URL to appropriate page
+        // pe rform action and set URL to appropriate page
         if (action.equals("join")) {
-            url = "/index.html";    // the "join" page
+//            url = "/index.html";    // the "join" page
+            url = "/index.jsp";
         }
         else if (action.equals("add")) {                
             // get parameters from the request
@@ -61,12 +59,27 @@ public class EmailListServlet extends HttpServlet {
             String contactMethod = request.getParameter("contactMethod");
 
             // store data in User object and save User object in db
-            User user = new User(firstName, lastName, email, dateOfBirth, heardFrom, wantAnnouncements, wantSendEmail, contactMethod);
-//            UserDB.insert(user);
+//            User user = new User(firstName, lastName, email, dateOfBirth, heardFrom, wantAnnouncements, wantSendEmail, contactMethod);
+
+            
+            String message;
+            if (firstName == null || lastName == null || email == null || dateOfBirth == null || firstName.isEmpty() || lastName.isEmpty() ||  email.isEmpty() ||  dateOfBirth.isEmpty()) {
+                message = "Please fill out all four text boxes.";
+                url = "/index.jsp";
+                request.setAttribute("message", message);
+            } else {
+                User user = new User(firstName, lastName, email, dateOfBirth, heardFrom, wantAnnouncements, wantSendEmail, contactMethod);
+                message = "";
+                url = "/thanks.jsp"; 
+//              UserDB.insert(user);
+                request.setAttribute("user", user); 
+                request.setAttribute("message", message);
+            }
             
             // set User object in request object and set URL
-            request.setAttribute("user", user);
-            url = "/thanks.jsp";   // the "thanks" page
+//            request.setAttribute("user", user); 
+//            request.setAttribute("message", message);
+//            url = "/thanks.jsp";   // the "thanks" page
         }
         
         // forward request and response objects to specified URL

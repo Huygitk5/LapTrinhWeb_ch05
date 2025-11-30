@@ -38,7 +38,7 @@ public class User implements Serializable {
         this.contactMethod = contactMethod;
     }
     
-        public String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
